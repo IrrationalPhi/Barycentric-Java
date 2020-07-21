@@ -7,6 +7,7 @@ public class BaryReferenceTriangle {
 	private Fraction s_A;
 	private Fraction s_B;
 	private Fraction s_C;
+	double area;
 
 	//constructor
 	public BaryReferenceTriangle (Fraction a, Fraction b, Fraction c) {
@@ -28,6 +29,13 @@ public class BaryReferenceTriangle {
 		this.s_A = Fraction.add(bSquare, cSquare).subtract(aSquare).divide(temp);
 		this.s_B = Fraction.add(cSquare, aSquare).subtract(bSquare).divide(temp);
 		this.s_C = Fraction.add(aSquare, bSquare).subtract(cSquare).divide(temp);
+
+		double sDo = s.toDouble();
+		double aDo = a.toDouble();
+		double bDo = b.toDouble();
+		double cDo = c.toDouble();
+
+		area = Math.sqrt(sDo*(sDo-aDo)*(sDo-bDo)*(sDo-cDo));
 	}
 
 	public Fraction getA() {
@@ -62,6 +70,42 @@ public class BaryReferenceTriangle {
 		return new BaryPoint(resX, resY, resZ);
 	}
 
+	public BaryLine drawPerp(BaryPoint p, BaryLine l) {
+		Fraction f = l.getY().subtract(l.getZ());
+		Fraction g = l.getZ().subtract(l.getX());
+		Fraction h = l.getX().subtract(l.getY());
+
+		Fraction bigF = Fraction.multiply(s_B, g).subtract(Fraction.multiply(s_C, h));
+		Fraction bigG = Fraction.multiply(s_C, h).subtract(Fraction.multiply(s_A, f));
+		Fraction bigH = Fraction.multiply(s_A, f).subtract(Fraction.multiply(s_B, g));
+
+		Fraction xRes = FractionMatrix.det(bigG, bigH, p.getY(), p.getZ());
+		Fraction yRes = FractionMatrix.det(bigH, bigF, p.getZ(), p.getX());
+		Fraction zRes = FractionMatrix.det(bigF, bigG, p.getX(), p.getY());
+
+		return new BaryLine(xRes, yRes, zRes);
+	}
+
+	public Fraction getSqDistance(BaryPoint p1, BaryPoint p2) {
+		if (p1.isInfinitePoint() || p2.isInfinitePoint()) 
+			throw new IllegalArgumentException("distance is infinity");
+		Fraction x = p2.getX().subtract(p1.getX());
+		Fraction y = p2.getY().subtract(p1.getY());
+		Fraction z = p2.getZ().subtract(p1.getZ());
+		Fraction res = a.square().multiply(Fraction.multiply(y, z));
+		res = res.add(b.square().multiply(Fraction.multiply(z, x)));
+		res = res.add(c.square().multiply(Fraction.multiply(x, y)));
+		return res.negate();
+	}
+
+	//get signed area of triangle with vertices p1, p2, p3
+	public double getArea(BaryPoint p1, BaryPoint p2, BaryPoint p3) {
+		FractionMatrix temp = new FractionMatrix(p1, p2, p3);
+		double temp1 = temp.det().toDouble();
+		return temp1*this.area;
+	}
+
+	//valid are entries in [-6, -1] and [1, 8]
 	public BaryPoint triangleCenter(int n) {
 		Fraction u, v, w;
 		switch (n) {
@@ -154,8 +198,43 @@ public class BaryReferenceTriangle {
 		return new BaryPoint(u, v, w);
 	}
 
-	//static methods
-	//public static boolean isPerpendicular(BaryLine l1, BaryLine l2) {
+	public boolean isPerpendicular(BaryPoint p1, BaryPoint p2, BaryPoint p3, BaryPoint p4) {
+		//perpendicularity lemma, need AC^2-AD^2=BC^2-BD^2
+		Fraction dist1 = getSqDistance(p1, p3);
+		Fraction dist2 = getSqDistance(p1, p4);
+		Fraction dist3 = getSqDistance(p2, p3);
+		Fraction dist4 = getSqDistance(p2, p4);
 
+		Fraction temp1 = dist1.subtract(dist2);
+		Fraction temp2 = dist3.subtract(dist4);
+
+		return temp1.equals(temp2);
+	}
+
+	//TODO
+	//public boolean isPerpendicular(BaryLine l1, BaryLine l2) {
+		//select convenient points on line, and check if perp
+	//}
+
+
+	//static methods
+	public static BaryLine drawParallel(BaryPoint p, BaryLine l) {
+		return p.drawParallel(l);
+	}
+
+	public static boolean isParallel(BaryLine l1, BaryLine l2) {
+		return l1.isParallel(l2);
+	}
+
+	public static boolean isParallel(BaryPoint p1, BaryPoint p2, BaryPoint p3, BaryPoint p4) {
+		BaryLine l1 = new BaryLine(p1, p2);
+		BaryLine l2 = new BaryLine(p3, p4);
+		return isParallel(l1, l2);
+	}
+
+	//TODO
+	//intersect with line through given a point on the circle
+	//public static BaryPoint intersect(Barycircle c, BaryLine l, BaryPoint p) {
+		
 	//}
 }

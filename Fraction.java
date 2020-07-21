@@ -110,6 +110,10 @@ public class Fraction {
 		return this.nume*q.deno < this.deno*q.nume;
 	} 
 
+	public double toDouble() {
+		return (double)this.nume/this.deno;
+	}
+
 	//static methods
 	//always positive gcd
 	public static long gcd(long a, long b) {

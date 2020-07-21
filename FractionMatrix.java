@@ -40,4 +40,10 @@ public class FractionMatrix {
 	public boolean isSingular() {
 		return this.det().isZero();
 	}
+
+	//a  b
+	//c  d
+	public static Fraction det(Fraction a, Fraction b, Fraction c, Fraction d) {
+		return a.multiply(d).subtract(b.multiply(c));
+	}
 }

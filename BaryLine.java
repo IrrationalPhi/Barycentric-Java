@@ -16,7 +16,19 @@ public class BaryLine {
 		this.u = Fraction.multiply(p1.getZ(), p2.getY()).subtract(Fraction.multiply(p2.getZ(), p1.getY()));
 		this.v = Fraction.multiply(p1.getX(), p2.getZ()).subtract(Fraction.multiply(p2.getX(), p1.getZ()));
 		this.w = Fraction.multiply(p1.getY(), p2.getX()).subtract(Fraction.multiply(p2.getY(), p1.getX()));
+	}
 
+	//accessors
+	public Fraction getX() {
+		return this.u;
+	}
+
+	public Fraction getY() {
+		return this.v;
+	}
+
+	public Fraction getZ() {
+		return this.w;
 	}
 
 	public Fraction[] toArray() {
@@ -25,13 +37,23 @@ public class BaryLine {
 	}
 
 	public void display() {
-		System.out.print("equation of line is: ");
 		this.u.display();
 		System.out.print("x + ");
 		this.v.display();
 		System.out.print("y + ");
 		this.w.display();
 		System.out.println("z = 0.");
+	}
+
+	//returns infinite point of line
+	public BaryPoint getInfinitePoint() {
+		return new BaryPoint(this.v.subtract(this.w), this.w.subtract(this.u), this.u.subtract(this.v));
+	}
+
+	public boolean isParallel(BaryLine other) {
+		Fraction one = new Fraction(1);
+		BaryLine infinityLine = new BaryLine(one, one, one);
+		return isConcurrent(this, other, infinityLine);
 	}
 
 	

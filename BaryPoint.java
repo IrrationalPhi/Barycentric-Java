@@ -70,12 +70,27 @@ public class BaryPoint {
 		System.out.println(")");
 	}
 
+	//checks if on line l
+	public boolean onLine(BaryLine l) {
+		Fraction res = l.getX().multiply(this.xCoord);
+		res = res.add(l.getY().multiply(this.yCoord));
+		res = res.add(l.getZ().multiply(this.zCoord));
+
+		return res.isZero();
+	}
+
 	//only use this for non infinite points
 	public boolean equals(BaryPoint other) {
 		if (this.isInfinitePoint())
 			throw new IllegalArgumentException("no infinity points plz");
 		return (this.xCoord == other.xCoord && this.yCoord == other.yCoord);
 		//no need to check z coord since we know same sum
+	}
+
+	//gets line through point parallel to line l
+	public BaryLine drawParallel(BaryLine l) {
+		BaryPoint infinity = l.getInfinitePoint();
+		return new BaryLine(this, infinity);
 	}
 
 	//static methods
