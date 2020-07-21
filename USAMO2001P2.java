@@ -1,5 +1,4 @@
-//solves problem at https://artofproblemsolving.com/community/q1h1458179p8404063
-public class SunkenRockAngleBisector {
+public class USAMO2001P2 {
 	public static void showPoint(BaryPoint p, String s) {
 		System.out.printf("%s: ", s);
 		p.display();
@@ -28,7 +27,7 @@ public class SunkenRockAngleBisector {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("solves problem at https://artofproblemsolving.com/community/q1h1458179p8404063");
+		System.out.println("solves USAMO 2001/2");
 		System.out.println();
 		//initialize reference triangle
 		Fraction a = new Fraction(8);
@@ -44,52 +43,38 @@ public class SunkenRockAngleBisector {
 
 		//problem setup
 		BaryPoint pI = refTri.triangleCenter(1);
-		BaryPoint pD = BaryLine.intersect(pA, pI, pB, pC);
-		BaryPoint pE = BaryLine.intersect(pB, pI, pC, pA);
-		BaryPoint pF = BaryLine.intersect(pC, pI, pA, pB);
+		//nagel
+		BaryPoint pN = refTri.triangleCenter(8);
+		//gergonne
+		BaryPoint pG = refTri.triangleCenter(7);
 
-		//excenter setup
-		BaryPoint pX = refTri.triangleCenter(-5);
-		BaryPoint pY = refTri.triangleCenter(-6);
+		BaryPoint pD1 = BaryLine.intersect(pA, pG, pB, pC);
+		BaryPoint pD2 = BaryLine.intersect(pA, pN, pB, pC);
+		BaryPoint pE2 = BaryLine.intersect(pB, pN, pC, pA);
 
-		BaryPoint pM = BaryLine.intersect(pB, pE, pF, pD);
-		BaryPoint pN = BaryLine.intersect(pC, pF, pD, pE);
+		BaryPoint pQ = pI.reflect(pD1);
 
-		//display points
-		System.out.printf("List of points: \n\n");
 		showPoint(pA, "A");
 		showPoint(pB, "B");
 		showPoint(pC, "C");
 		showPoint(pI, "I");
-		showPoint(pD, "D");
-		showPoint(pE, "E");
-		showPoint(pF, "F");
-		showPoint(pX, "X");
-		showPoint(pY, "Y");
-		showPoint(pM, "M");
 		showPoint(pN, "N");
+		showPoint(pG, "G");
+		showPoint(pD1, "D_1");
+		showPoint(pD2, "D_2");
+		showPoint(pE2, "E_2");
+
+		System.out.println();
+		System.out.println("bashing distance: ");
+		Fraction temp1 = refTri.getSqDistance(pA, pQ);
+		Fraction temp2 = refTri.getSqDistance(pN, pD2);
+		System.out.print("sq length of AQ: ");
+		temp1.display();
+		System.out.println();
+		System.out.print("sq length of ND_2: ");
+		temp2.display();
 		System.out.println();
 
-		//solving the problem itself
-
-		System.out.println("check NX, AD, MY concur");
-
-		BaryLine pNX = new BaryLine(pN, pX);
-		BaryLine pAD = new BaryLine(pA, pD);
-		BaryLine pMY = new BaryLine(pM, pY);
-
-		displayConcurTest(pNX, pAD, pMY);
-
-		System.out.println("check MY, AN, BC concur");
-
-		BaryLine pAN = new BaryLine(pA, pN);
-		BaryLine pBC = new BaryLine(pB, pC);
-
-		displayConcurTest(pMY, pAN, pBC);
-
-		BaryLine pAM = new BaryLine(pA, pM);
-
-		System.out.println("check NX, AM, BC concur");
-		displayConcurTest(pNX, pAM, pBC);
+		System.out.println(refTri.equalLength(pA, pQ, pN, pD2));
 	}
 }

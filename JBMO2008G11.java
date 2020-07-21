@@ -1,8 +1,13 @@
-//solves problem at https://artofproblemsolving.com/community/q1h1458179p8404063
-public class SunkenRockAngleBisector {
+//solves JBMO 2008 Shortlist G11
+public class JBMO2008G11 {
 	public static void showPoint(BaryPoint p, String s) {
 		System.out.printf("%s: ", s);
 		p.display();
+	}
+
+	public static void showLine(BaryLine l, String s) {
+		System.out.printf("%s: ", s);
+		l.display();
 	}
 
 	public static void displayConcurTest(BaryLine l1, BaryLine l2, BaryLine l3) {
@@ -28,7 +33,7 @@ public class SunkenRockAngleBisector {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("solves problem at https://artofproblemsolving.com/community/q1h1458179p8404063");
+		System.out.println("solves JBMO 2008 shortlist G11");
 		System.out.println();
 		//initialize reference triangle
 		Fraction a = new Fraction(8);
@@ -41,55 +46,45 @@ public class SunkenRockAngleBisector {
 		BaryPoint pA = refTri.triangleCenter(-1);
 		BaryPoint pB = refTri.triangleCenter(-2);
 		BaryPoint pC = refTri.triangleCenter(-3);
+		BaryPoint pM = BaryPoint.midpoint(pB, pC);
 
-		//problem setup
-		BaryPoint pI = refTri.triangleCenter(1);
-		BaryPoint pD = BaryLine.intersect(pA, pI, pB, pC);
-		BaryPoint pE = BaryLine.intersect(pB, pI, pC, pA);
-		BaryPoint pF = BaryLine.intersect(pC, pI, pA, pB);
+		BaryPoint pH = refTri.triangleCenter(4);
+		BaryPoint pD = BaryLine.intersect(pB, pH, pA, pC);
+		BaryPoint pE = BaryLine.intersect(pC, pH, pA, pB);
 
-		//excenter setup
-		BaryPoint pX = refTri.triangleCenter(-5);
-		BaryPoint pY = refTri.triangleCenter(-6);
+		BaryPoint pP = BaryLine.intersect(pD, pE, pB, pC);
 
-		BaryPoint pM = BaryLine.intersect(pB, pE, pF, pD);
-		BaryPoint pN = BaryLine.intersect(pC, pF, pD, pE);
+		//line through C perp to BC
+		BaryLine l1 = refTri.drawPerp(pC, pB, pC);
+		//line through M perp to AC
+		BaryLine l2 = refTri.drawPerp(pM, pA, pC);
 
-		//display points
-		System.out.printf("List of points: \n\n");
+		BaryPoint pR = BaryLine.intersect(l1, l2);
+
+		//display data
 		showPoint(pA, "A");
 		showPoint(pB, "B");
 		showPoint(pC, "C");
-		showPoint(pI, "I");
+		showPoint(pM, "M");
+		showPoint(pH, "H");
 		showPoint(pD, "D");
 		showPoint(pE, "E");
-		showPoint(pF, "F");
-		showPoint(pX, "X");
-		showPoint(pY, "Y");
-		showPoint(pM, "M");
-		showPoint(pN, "N");
+		showPoint(pP, "P");
 		System.out.println();
 
-		//solving the problem itself
+		showLine(l1, "through C perp to BC");
+		showLine(l2, "through M perp to AC");
 
-		System.out.println("check NX, AD, MY concur");
+		System.out.print("intersect lines at ");
 
-		BaryLine pNX = new BaryLine(pN, pX);
-		BaryLine pAD = new BaryLine(pA, pD);
-		BaryLine pMY = new BaryLine(pM, pY);
+		showPoint(pR, "R");
 
-		displayConcurTest(pNX, pAD, pMY);
+		System.out.println();
+		System.out.println("verify AM, PR perpendicular");
+		System.out.println(refTri.isPerpendicular(pA, pM, pP, pR));
 
-		System.out.println("check MY, AN, BC concur");
-
-		BaryLine pAN = new BaryLine(pA, pN);
-		BaryLine pBC = new BaryLine(pB, pC);
-
-		displayConcurTest(pMY, pAN, pBC);
-
-		BaryLine pAM = new BaryLine(pA, pM);
-
-		System.out.println("check NX, AM, BC concur");
-		displayConcurTest(pNX, pAM, pBC);
+		System.out.println();
+		System.out.println("bonus! verify P, H, R collinear");
+		System.out.println(BaryPoint.isCollinear(pP, pH, pR));
 	}
 }
