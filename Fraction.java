@@ -79,6 +79,11 @@ public class Fraction {
 		return this.nume == 0;
 	}
 
+	//check if same value
+	public boolean equals(Fraction q) {
+		return (this.nume == q.nume && this.deno == q.deno);
+	}
+
 	public void display() {
 		if (this.isZero())
 			System.out.print("0");
@@ -140,5 +145,17 @@ public class Fraction {
 
 	public static Fraction multiply(Fraction q, Fraction r, Fraction p) {
 		return q.multiply(r).multiply(p);
+	}
+
+	public static void simplify(Fraction q, Fraction r, Fraction p) {
+		long g = gcd(q.nume, gcd(r.nume, p.nume));
+		q.nume /= g; r.nume /= g; p.nume /= g;
+
+		long deno1 = q.deno;
+		long deno2 = r.deno;
+		long deno3 = p.deno;
+
+		g = gcd(q.deno, gcd(r.deno, p.deno));
+		q.deno /= g; r.deno /= g; p.deno /= g;
 	}
 }

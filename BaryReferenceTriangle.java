@@ -7,7 +7,7 @@ public class BaryReferenceTriangle {
 	private Fraction s_A;
 	private Fraction s_B;
 	private Fraction s_C;
-	double area;
+	private double area;
 
 	//constructor
 	public BaryReferenceTriangle (Fraction a, Fraction b, Fraction c) {
@@ -84,6 +84,18 @@ public class BaryReferenceTriangle {
 		Fraction zRes = FractionMatrix.det(bigF, bigG, p.getX(), p.getY());
 
 		return new BaryLine(xRes, yRes, zRes);
+	}
+
+	//draw parallel from p to line ab
+	public BaryLine drawParallel(BaryPoint p, BaryPoint a, BaryPoint b) {
+		BaryLine ab = new BaryLine(a, b);
+		return drawParallel(p, ab);
+	}
+
+	//draw perp from p to line ab
+	public BaryLine drawPerp(BaryPoint p, BaryPoint a, BaryPoint b) {
+		BaryLine ab = new BaryLine(a, b);
+		return drawPerp(p, ab);
 	}
 
 	public Fraction getSqDistance(BaryPoint p1, BaryPoint p2) {
@@ -192,6 +204,7 @@ public class BaryReferenceTriangle {
 				u = s.subtract(a);
 				v = s.subtract(b);
 				w = s.subtract(c);
+			break;
 			default:
 				throw new IllegalArgumentException("invalid triangle center");
 		}
@@ -216,6 +229,12 @@ public class BaryReferenceTriangle {
 		//select convenient points on line, and check if perp
 	//}
 
+	public boolean equalLength(BaryPoint p1, BaryPoint p2, BaryPoint p3, BaryPoint p4) {
+		Fraction temp1 = getSqDistance(p1, p2);
+		Fraction temp2 = getSqDistance(p3, p4);
+
+		return temp1.equals(temp2);
+	}
 
 	//static methods
 	public static BaryLine drawParallel(BaryPoint p, BaryLine l) {

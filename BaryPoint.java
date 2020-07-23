@@ -80,12 +80,15 @@ public class BaryPoint {
 	}
 
 	//only use this for non infinite points
+	/*
 	public boolean equals(BaryPoint other) {
 		if (this.isInfinitePoint())
 			throw new IllegalArgumentException("no infinity points plz");
 		return (this.xCoord == other.xCoord && this.yCoord == other.yCoord);
 		//no need to check z coord since we know same sum
 	}
+	//possible issue of x coords being additive inverses
+	*/
 
 	//gets line through point parallel to line l
 	public BaryLine drawParallel(BaryLine l) {

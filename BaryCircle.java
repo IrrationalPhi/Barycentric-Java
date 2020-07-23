@@ -22,7 +22,7 @@ public class BaryCircle {
 		v.display();
 		System.out.print("y + ");
 		w.display();
-		System.out.println("z = 0. ");
+		System.out.println("z) = 0. ");
 	}
 
 	//draw radical axis
@@ -33,4 +33,7 @@ public class BaryCircle {
 
 		return new BaryLine(temp1, temp2, temp3);
 	}
+
+	//TODO
+	//to add horrible eq of circle given 3 points
 }

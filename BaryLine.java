@@ -6,6 +6,7 @@ public class BaryLine {
 	private Fraction w;
 
 	public BaryLine(Fraction u, Fraction v, Fraction w) {
+		Fraction.simplify(u, v, w);
 		this.u = u;
 		this.v = v;
 		this.w = w;
@@ -13,9 +14,14 @@ public class BaryLine {
 
 	//construct eq of line through 2 points
 	public BaryLine(BaryPoint p1, BaryPoint p2) {
-		this.u = Fraction.multiply(p1.getZ(), p2.getY()).subtract(Fraction.multiply(p2.getZ(), p1.getY()));
-		this.v = Fraction.multiply(p1.getX(), p2.getZ()).subtract(Fraction.multiply(p2.getX(), p1.getZ()));
-		this.w = Fraction.multiply(p1.getY(), p2.getX()).subtract(Fraction.multiply(p2.getY(), p1.getX()));
+		Fraction u = Fraction.multiply(p1.getZ(), p2.getY()).subtract(Fraction.multiply(p2.getZ(), p1.getY()));
+		Fraction v = Fraction.multiply(p1.getX(), p2.getZ()).subtract(Fraction.multiply(p2.getX(), p1.getZ()));
+		Fraction w = Fraction.multiply(p1.getY(), p2.getX()).subtract(Fraction.multiply(p2.getY(), p1.getX()));
+
+		Fraction.simplify(u, v, w);
+		this.u = u;
+		this.v = v;
+		this.w = w;
 	}
 
 	//accessors
